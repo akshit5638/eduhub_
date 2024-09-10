@@ -3,6 +3,8 @@ import {
   contact,
   courseRequest,
   getDashboardStats,
+  buySubscription,
+  cancelSubscription,
 } from "../controllers/otherController.js";
 
 import { authorizeAdmin, isAuthenticated } from "../middlewares/auth.js";
@@ -19,5 +21,6 @@ router.route("/courserequest").post(courseRequest);
 router
   .route("/admin/stats")
   .get(isAuthenticated, authorizeAdmin, getDashboardStats);
-
+router.route("/subscribe").get(isAuthenticated, buySubscription);
+router.route("/subscribe/cancel").delete(isAuthenticated, cancelSubscription);
 export default router;

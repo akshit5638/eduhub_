@@ -6,31 +6,22 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import axios from 'axios';
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { buySubscription } from '../../redux/actions/user';
-import { server } from '../../redux/store';
 import toast from 'react-hot-toast';
-import logo from '../../assets/images/logo.png';
+import { useNavigate } from 'react-router-dom';
+
 
 const Subscribe = ({ user }) => {
   const dispatch = useDispatch();
-  const [key, setKey] = useState('');
-
-  const { loading, error, subscriptionId } = useSelector(
-    state => state.subscription
-  );
+  const navigate = useNavigate();
+  const { loading, error } = useSelector(state => state.subscription);
   const { error: courseError } = useSelector(state => state.course);
 
   const subscribeHandler = async () => {
-    const {
-      data: { key },
-    } = await axios.get(`${server}/razorpaykey`);
-
-    setKey(key);
     dispatch(buySubscription());
+    // navigate('/paymentsuccess');
   };
 
   useEffect(() => {
@@ -42,42 +33,7 @@ const Subscribe = ({ user }) => {
       toast.error(courseError);
       dispatch({ type: 'clearError' });
     }
-    if (subscriptionId) {
-      const openPopUp = () => {
-        const options = {
-          key,
-          name: 'CourseBundler',
-          description: 'Get access to all premium content',
-          image: logo,
-          subscription_id: subscriptionId,
-          callback_url: `${server}/paymentverification`,
-          prefill: {
-            name: user.name,
-            email: user.email,
-            contact: '',
-          },
-          notes: {
-            address: '6 pack programmer at youtube',
-          },
-          theme: {
-            color: '#FFC800',
-          },
-        };
-
-        const razor = new window.Razorpay(options);
-        razor.open();
-      };
-      openPopUp();
-    }
-  }, [
-    dispatch,
-    error,
-    courseError,
-    user.name,
-    user.email,
-    key,
-    subscriptionId,
-  ]);
+  }, [dispatch, error, courseError]);
 
   return (
     <Container h="90vh" p="16">

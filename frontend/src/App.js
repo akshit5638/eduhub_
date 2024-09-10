@@ -12,7 +12,6 @@ import Header from './components/Layout/Header/Header';
 import Request from './components/Request/Request';
 import About from './components/About/About';
 import Subscribe from './components/Payments/Subscribe';
-import PaymentFail from './components/Payments/PaymentFail';
 import PaymentSuccess from './components/Payments/PaymentSuccess';
 import NotFound from './components/Layout/NotFound/NotFound';
 import CoursePage from './components/CoursePage/CoursePage';
@@ -51,9 +50,9 @@ function App() {
     }
   }, [dispatch, error, message]);
 
-  // useEffect(() => {
-  //   dispatch(loadUser());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [dispatch]);
 
   return (
     <Router>
@@ -163,7 +162,6 @@ function App() {
 
             <Route path="/paymentsuccess" element={<PaymentSuccess />} />
 
-            <Route path="/paymentfail" element={<PaymentFail />} />
 
             {/* Admin Routes */}
             <Route

@@ -10,13 +10,13 @@ config({
 const app = express();
 
 // Using Middlewares
-app.use(express.json());
+app.use(express.json()); //arse incoming requests with JSON payloads, use in req.body
 app.use(
   express.urlencoded({
     extended: true,
   })
 );
-app.use(cookieParser());
+app.use(cookieParser()); // to read req.cookie
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,
@@ -28,12 +28,12 @@ app.use(
 // Importing & Using Routes
 import course from "./routes/courseRoutes.js";
 import user from "./routes/userRoutes.js";
-import payment from "./routes/paymentRoutes.js";
+// import payment from "./routes/paymentRoutes.js";
 import other from "./routes/otherRoutes.js";
 
 app.use("/api/v1", course);
 app.use("/api/v1", user);
-app.use("/api/v1", payment);
+// app.use("/api/v1", payment);
 app.use("/api/v1", other);
 
 export default app;

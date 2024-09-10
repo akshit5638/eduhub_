@@ -36,13 +36,12 @@ export const register = catchAsyncError(async (req, res, next) => {
 
   sendToken(res, user, "Registered Successfully", 201);
 });
-
 export const login = catchAsyncError(async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password)
     return next(new ErrorHandler("Please enter all field", 400));
-  const user = await User.findOne({ email }).select("+password");
+  const user = await User.findOne({ email }).select("+password"); // as by default passwords select is none is model
   if (!user) return next(new ErrorHandler("Incorrect Email or Password", 401));
 
   const isMatch = await user.comparePassword(password);
@@ -196,14 +195,15 @@ export const addToPlaylist = catchAsyncError(async (req, res, next) => {
 
   const course = await Course.findById(req.body.id);
 
+
   if (!course) return next(new ErrorHandler("Invalid Course Id", 404));
+
 
   const itemExist = user.playlist.find((item) => {
     if (item.course.toString() === course._id.toString()) return true;
   });
-
   if (itemExist) return next(new ErrorHandler("Item Already Exist", 409));
-
+  console.log('4');
   user.playlist.push({
     course: course._id,
     poster: course.poster.url,
